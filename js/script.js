@@ -11,18 +11,21 @@
 
 class Game {
     constructor(setup) {
-        const root = document.querySelector(setup.root);
-        this.wordWrapper = root.querySelector(".wordWrapper");
-        this.fieldsWrapper = root.querySelector(".fieldsWrapper");
-        this.checkBtn = root.querySelector(".enterBtn");
-        this.inputLetter = root.querySelector(".letterEnter");
-        this.wordFullSection = root.querySelector(".fullInput")
-        this.letterSection = root.querySelector(".oneLetter");
-        this.fullWordBtn = root.querySelector(".fullWordBtn");
-        this.oneLetterBtn = root.querySelector(".lettersBtn");
-        this.table = root.querySelector("table>tbody");
+        this.root = document.querySelector(setup.root);
+        if(!this.root.classList.contains("relative")){
+            this.root.classList.add("relative")
+        }
+        this.wordWrapper = this.root.querySelector(".wordWrapper");
+        this.fieldsWrapper = this.root.querySelector(".fieldsWrapper");
+        this.checkBtn = this.root.querySelector(".enterBtn");
+        this.inputLetter = this.root.querySelector(".letterEnter");
+        this.wordFullSection = this.root.querySelector(".fullInput")
+        this.letterSection = this.root.querySelector(".oneLetter");
+        this.fullWordBtn = this.root.querySelector(".fullWordBtn");
+        this.oneLetterBtn = this.root.querySelector(".lettersBtn");
+        this.table = this.root.querySelector("table>tbody");
         console.log(this.table.children[1]);
-        this.playerLabel = root.querySelector(".currentPlayer")
+        this.playerLabel = this.root.querySelector(".currentPlayer")
 
         this.wordsForPlay = setup.words;        
         this.word = this.wordsForPlay[this.generateRandomInt(4)];
@@ -206,10 +209,15 @@ class Game {
     }
 
     showWin(){
-        console.log(this.currentPlayer);
-        this.createElement("p", document.body, "winString", `Победил ${this.currentPlayer + 1}`);
+        this.createElement("p", this.root, "winString", `Победил ${this.currentPlayer + 1}`);
+        setTimeout(this.deleteWin, 2000);
     }
 
+    //TODO находить строку в root вместо document
+    deleteWin(){
+        const str = document.querySelector(".winString");
+        str.remove();
+    }
 
     nextStep(){
         if (this.currentPlayer == this.players.length - 1){
