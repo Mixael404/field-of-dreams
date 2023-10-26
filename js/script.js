@@ -224,6 +224,7 @@ const game1 = {
     root: ".game1",
     word: "мама",
     players: 2,
-    words: ["солома", "река", "крабик", "дом", "дверь"]
+    words: ["солома", "река", "крабик", "дом", "дверь"],
+    name: "Mikhail"
 }
 const newGame = new Game(game1);
