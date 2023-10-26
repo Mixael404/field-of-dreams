@@ -26,6 +26,7 @@ class Game {
 
         this.wordsForPlay = setup.words;        
         this.word = this.wordsForPlay[this.generateRandomInt(4)];
+        console.log(this.word);
         this.fullScore = new Array(setup.players).fill(0);
         this.players = new Array(setup.players);
         this.currentPlayer = 0;
@@ -139,11 +140,7 @@ class Game {
         }
         if (!this.wordArray.includes(this.inputLetter.value)) {
             this.inputLetter.value = "";
-            if (this.currentPlayer == this.players.length - 1){
-                this.currentPlayer = 0;
-            } else {
-                this.currentPlayer++;
-            }
+            this.nextStep();
         }
         if (this.wordArray.includes(this.inputLetter.value)) {
             const letter = this.inputLetter.value;
@@ -157,6 +154,8 @@ class Game {
         this.checkWinByLastLetterInput();
         this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
     }
+
+
 
     wordWin() {
         if (this.wordFullSection.classList.contains("collapsed")) {
@@ -172,14 +171,16 @@ class Game {
             this.refreshAfterWin();
             this.changeInputType();
         } else {
+            // Стирание активных инпутов после неправильного ввода слова
+            for (let i = 0; i < this.fieldsWrapper.children.length; i++) {
+                if(this.fieldsWrapper.children[i].disabled == false){
+                    this.fieldsWrapper.children[i].value = "";
+                }
+            }
             console.log("Поражение :(");
             this.players[this.currentPlayer] -= 1000;
             this.updateScoreTable(this.players);
-            if (this.currentPlayer == this.players.length - 1){
-                this.currentPlayer = 0;
-            } else {
-                this.currentPlayer++;
-            }
+            this.nextStep()
             this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
         }
     }
@@ -190,24 +191,33 @@ class Game {
         }
         console.log(this.fullScore);
         this.word = this.wordsForPlay[this.generateRandomInt(4)];
+        this.showWin();
         this.currentPlayer = 0;
         this.init();
-        this.showWin();
     }
 
     checkWinByLastLetterInput(){
         if (this.state.toString() == this.wordArray.toString()){
             console.log("Победа!");
-            this.players[this.currentPlayer] += 500;
+            this.players[this.currentPlayer] += 300;
             this.updateScoreTable(this.players);
             this.refreshAfterWin();
         }
     }
 
     showWin(){
+        console.log(this.currentPlayer);
         this.createElement("p", document.body, "winString", `Победил ${this.currentPlayer + 1}`);
     }
 
+
+    nextStep(){
+        if (this.currentPlayer == this.players.length - 1){
+            this.currentPlayer = 0;
+        } else {
+            this.currentPlayer++;
+        }
+    }
 
     generateRandomInt(max){
         let maxNumber = Math.floor(Math.random() * max);
