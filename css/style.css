@@ -1,0 +1,99 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.hidden{
+    opacity: 0;;
+}
+.collapsed{
+    display: none;
+}
+
+
+.wordWrapper{
+    margin-top: 100px;
+}
+
+.fieldsWrapper, .wordWrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+.fieldsWrapper .field , .wordWrapper .letterWrapper, .letterEnter{
+    width: 70px;
+    height: 70px;
+    border: 1px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: none;
+    text-align: center;
+    font-size: 36px;
+    text-transform: uppercase;
+}
+.letterEnter{
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+.enterTitle{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.wordWrapper .letterWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.enterBtn{
+    padding: 6px;
+    background-color: aqua;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+    border: none;
+    margin-bottom: 30px;
+}
+.fullWordBtn, .lettersBtn{
+    width: fit-content;
+    border: none;
+    background-color: transparent;
+    color: blue;
+    font-size: 24px;
+}
+
+table{
+    border: 2px solid black;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+td{
+    border: 1px solid gray;
+    padding: 5px;
+    text-align: center;
+}
+
+.winString{
+    position: absolute;
+    font-size: 120px;
+    color: greenyellow;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: hideStr 2s ease-in-out forwards;
+}
+
+@keyframes hideStr{
+    0% {
+        font-size: 150px;
+    }
+    100% {
+        font-size: 70px;
+        display: none;
+    }
+}
