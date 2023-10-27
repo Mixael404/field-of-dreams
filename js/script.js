@@ -13,7 +13,7 @@ class Game {
     constructor(setup) {
         this.root = document.querySelector(setup.root);
         if(!this.root.classList.contains("relative")){
-            this.root.classList.add("relative")
+            this.root.classList.add("relative");
         }
         this.wordWrapper = this.root.querySelector(".wordWrapper");
         this.fieldsWrapper = this.root.querySelector(".fieldsWrapper");
@@ -42,7 +42,6 @@ class Game {
     }
 
     init() {
-        // TODO добавить обнуление players 
         this.lowerCaseWord = this.word.toLowerCase();
         this.wordArray = this.lowerCaseWord.split("");
         this.state = new Array(this.wordArray.length);
