@@ -1,13 +1,3 @@
-// const wordWrapper = document.querySelector(".wordWrapper");
-// const fieldsWrapper = document.querySelector(".fieldsWrapper");
-// const checkBtn = document.querySelector(".enterBtn");
-// const inputLetter = document.querySelector(".letterEnter");
-// const wordFullSection = document.querySelector(".fullInput")
-// const letterSection = document.querySelector(".oneLetter");
-// const fullWordBtn = document.querySelector(".fullWordBtn");
-// const oneLetterBtn = document.querySelector(".lettersBtn");
-
-
 
 class Game {
     constructor(setup) {
@@ -142,7 +132,7 @@ class Game {
         }
         if (!this.wordArray.includes(this.inputLetter.value)) {
             this.inputLetter.value = "";
-            this.nextStep();
+            this.nextPlayer();
         }
         if (this.wordArray.includes(this.inputLetter.value)) {
             const letter = this.inputLetter.value;
@@ -182,7 +172,7 @@ class Game {
             console.log("Поражение :(");
             this.players[this.currentPlayer] -= 1000;
             this.updateScoreTable(this.players);
-            this.nextStep()
+            this.nextPlayer()
             this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
         }
     }
@@ -218,7 +208,7 @@ class Game {
         str.remove();
     }
 
-    nextStep(){
+    nextPlayer(){
         if (this.currentPlayer == this.players.length - 1){
             this.currentPlayer = 0;
         } else {
@@ -241,7 +231,7 @@ const game1 = {
     root: ".game1",
     word: "мама",
     players: 2,
-    words: ["солома", "река", "крабик", "дом", "дверь"],
+    words: ["", "солома", "река", "крабик", "дом", "дверь"],
     name: "Mikhail"
 }
 const newGame = new Game(game1);
