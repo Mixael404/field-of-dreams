@@ -1,24 +1,24 @@
 function isCookiesHaveKey(key) {
     return document.cookie.includes(key) == true;
 }
-// document.cookie = "word=; expires=Tue, 19 Jan 2018 03:14:07 GMT"
+// document.cookie = "state ; expires=Tue, 19 Jan 2018 03:14:07 GMT"
+// document.cookie = "state=[]"
 
 class Game {
     constructor(setup) {
-
-        // const isCookiesHaveState = isCookiesHaveKey("state");
-        // const isCookiesHavePlayers = isCookiesHaveKey("players");
-        // const isCookiesHaveWord = isCookiesHaveKey("word");
-        // console.log(isCookiesHaveState);
-        // if(!isCookiesHaveState){
-        //     this.createCookieKey("state=[]");
-        // }
-        // if(!isCookiesHavePlayers){
-        //     this.createCookieKey("players=[]");
-        // }
-        // if(!isCookiesHaveWord){
-        //     this.createCookieKey("word=[]");
-        // }
+        const isCookiesHaveState = isCookiesHaveKey("state");
+        const isCookiesHavePlayers = isCookiesHaveKey("players");
+        const isCookiesHaveWord = isCookiesHaveKey("word");
+        console.log(isCookiesHaveState);
+        if(!isCookiesHaveState){
+            this.createCookieKey("state=[]");
+        }
+        if(!isCookiesHavePlayers){
+            this.createCookieKey("players=[]");
+        }
+        if(!isCookiesHaveWord){
+            this.createCookieKey("word=[]");
+        }
 
 
         this.root = document.querySelector(setup.root);
@@ -60,11 +60,13 @@ class Game {
         // document.cookie = "word=" + this.encodedWord;
         // console.log(document.cookie);
         this.wordArray = this.getData("word");
-        this.state = new Array(this.wordArray.length);
+        // this.state = new Array(this.wordArray.length);
+        this.state = this.getData("state");
         this.checkedLetters = [];
         this.players.fill(0);
         this.setVisualElements();
         this.setScoreTable();
+        this.drawLetters();
         console.log(this.wordArray);
     }
 
@@ -174,6 +176,7 @@ class Game {
             this.players[this.currentPlayer] += 100 * this.generateRandomInt(5);
             this.checkedLetters.push(letter);
             this.updateScoreTable(this.players);
+            this.pushToCookie("state", this.state)
         }
         console.log(this.state);
         this.checkWinByLastLetterInput();
@@ -190,7 +193,9 @@ class Game {
         for (let i = 0; i < this.fieldsWrapper.children.length; i++) {
             word.push(this.fieldsWrapper.children[i].value);
         }
-        if (word.join("") == this.lowerCaseWord) {
+        console.log(word);
+        console.log(this.wordArray);
+        if (word.join("") == this.wordArray.join("")) {
             console.log("Победил " + (this.currentPlayer + 1));
             this.players[this.currentPlayer] += 1000;
             this.refreshAfterWin();
@@ -258,6 +263,7 @@ class Game {
     }
 
     startNewGame(){
+        document.cookie = "state=[]";
         this.word = this.wordsForPlay[this.generateRandomInt(6)];
         console.log(this.word);
         this.lowerCaseWord = this.word.toLowerCase();
