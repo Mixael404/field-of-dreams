@@ -2,7 +2,7 @@ function isCookiesHaveKey(key) {
     return document.cookie.includes(key) == true;
 }
 // document.cookie = "state ; expires=Tue, 19 Jan 2018 03:14:07 GMT"
-// document.cookie = "state=[]"
+// document.cookie = "word="
 
 class Game {
     constructor(setup) {
@@ -39,11 +39,11 @@ class Game {
         this.playerLabel = this.root.querySelector(".currentPlayer");
         this.newGameBtn = this.root.querySelector(".newGame");
 
+        this.amountOfPlayers = setup.players;
         this.wordsForPlay = setup.words;        
         this.fullScore = new Array(setup.players).fill(0);
-        this.players = new Array(setup.players);
+        this.players = new Array(this.amountOfPlayers);
         this.currentPlayer = 0;
-
 
         this.init();
         this.scoreRow = this.table.children[1];
@@ -52,18 +52,13 @@ class Game {
     }
 
     init() {
-        // this.word = this.wordsForPlay[this.generateRandomInt(6)];
-        // console.log(this.word);
-        // this.lowerCaseWord = this.word.toLowerCase();
-        // this.encodedWord = encodeURIComponent(this.lowerCaseWord);
-        // this.wordArray = this.lowerCaseWord.split("");
-        // document.cookie = "word=" + this.encodedWord;
-        // console.log(document.cookie);
         this.wordArray = this.getData("word");
         // this.state = new Array(this.wordArray.length);
         this.state = this.getData("state");
         this.checkedLetters = [];
-        this.players.fill(0);
+        // this.players.fill(0);
+        this.players = this.getData("players");
+        console.log(this.players);
         this.setVisualElements();
         this.setScoreTable();
         this.drawLetters();
@@ -176,9 +171,11 @@ class Game {
             this.players[this.currentPlayer] += 100 * this.generateRandomInt(5);
             this.checkedLetters.push(letter);
             this.updateScoreTable(this.players);
+            this.pushToCookie("players", this.players)
             this.pushToCookie("state", this.state)
         }
         console.log(this.state);
+        console.log(this.players);
         this.checkWinByLastLetterInput();
         this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
     }
@@ -193,8 +190,6 @@ class Game {
         for (let i = 0; i < this.fieldsWrapper.children.length; i++) {
             word.push(this.fieldsWrapper.children[i].value);
         }
-        console.log(word);
-        console.log(this.wordArray);
         if (word.join("") == this.wordArray.join("")) {
             console.log("Победил " + (this.currentPlayer + 1));
             this.players[this.currentPlayer] += 1000;
@@ -223,6 +218,7 @@ class Game {
         this.word = this.wordsForPlay[this.generateRandomInt(4)];
         this.showWin();
         this.currentPlayer = 0;
+        this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
         this.startNewGame();
     }
 
@@ -262,14 +258,21 @@ class Game {
         return maxNumber;
     }
 
-    startNewGame(){
-        document.cookie = "state=[]";
+    generateWord(){
         this.word = this.wordsForPlay[this.generateRandomInt(6)];
         console.log(this.word);
         this.lowerCaseWord = this.word.toLowerCase();
         this.encodedWord = encodeURIComponent(this.lowerCaseWord);
         this.wordArray = this.lowerCaseWord.split("");
         document.cookie = "word=" + this.encodedWord;
+    }
+
+    startNewGame(){
+        document.cookie = "state=[]";
+        this.players = new Array(this.amountOfPlayers);
+        let playersArr = this.players.fill(0);
+        this.pushToCookie("players", playersArr);
+        this.generateWord();
         console.log(document.cookie);
         this.init();
     }
@@ -318,7 +321,7 @@ class Game {
 const game1 = {
     root: ".game1",
     word: "мама",
-    players: 2,
+    players: 4,
     words: ["", "солома", "река", "крабик", "дом", "дверь"],
     name: "Mikhail"
 }
