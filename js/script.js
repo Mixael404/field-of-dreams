@@ -9,6 +9,7 @@ class Game {
         const isCookiesHaveState = isCookiesHaveKey("state");
         const isCookiesHavePlayers = isCookiesHaveKey("players");
         const isCookiesHaveWord = isCookiesHaveKey("word");
+        const isCookiesHaveCurrentPlayer = isCookiesHaveKey("currentplayer");
         console.log(isCookiesHaveState);
         if(!isCookiesHaveState){
             this.createCookieKey("state=[]");
@@ -18,6 +19,9 @@ class Game {
         }
         if(!isCookiesHaveWord){
             this.createCookieKey("word=[]");
+        }
+        if (!isCookiesHaveCurrentPlayer){
+            this.createCookieKey("currentplayer=")
         }
 
 
@@ -53,16 +57,16 @@ class Game {
 
     init() {
         this.wordArray = this.getData("word");
-        // this.state = new Array(this.wordArray.length);
         this.state = this.getData("state");
         this.checkedLetters = [];
-        // this.players.fill(0);
         this.players = this.getData("players");
-        console.log(this.players);
+        this.currentPlayer = this.getData("currentplayer");
+        console.log(this.currentPlayer);
         this.setVisualElements();
         this.setScoreTable();
         this.drawLetters();
         console.log(this.wordArray);
+        this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
     }
 
     addEventListeners(){
@@ -248,6 +252,7 @@ class Game {
         } else {
             this.currentPlayer++;
         }
+        document.cookie = "currentplayer=" + this.currentPlayer;
     }
 
     generateRandomInt(max){
@@ -272,12 +277,16 @@ class Game {
         this.players = new Array(this.amountOfPlayers);
         let playersArr = this.players.fill(0);
         this.pushToCookie("players", playersArr);
+        document.cookie = "currentplayer=0";
         this.generateWord();
         console.log(document.cookie);
         this.init();
     }
 
 
+
+
+    // Cookie functions
 
     createCookieKey(cookie){
         document.cookie = cookie + "; expires=Tue, 19 Jan 2038 03:14:07 GMT"
@@ -305,8 +314,10 @@ class Game {
         const currentData = this.getDataFromCookie(key);
         const decodedData = decodeURIComponent(currentData);
         let arrData;
-        if (decodedData[0] != "["){
+        if (key == "word"){
             arrData = decodedData.split("");
+        } else if (key == "currentplayer"){
+            arrData = +(decodedData);
         } else {
             arrData = JSON.parse(decodedData);
         }
@@ -321,7 +332,7 @@ class Game {
 const game1 = {
     root: ".game1",
     word: "мама",
-    players: 4,
+    players: 3,
     words: ["", "солома", "река", "крабик", "дом", "дверь"],
     name: "Mikhail"
 }
