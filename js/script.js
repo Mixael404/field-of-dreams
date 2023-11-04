@@ -343,7 +343,7 @@ class Game {
 const game1 = {
     root: ".game1",
     word: "мама",
-    players: 2,
+    players: 3,
     words: ["", "солома", "река", "крабик", "дом", "дверь"],
     name: "Mikhail"
 }

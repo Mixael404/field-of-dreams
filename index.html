@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="banerWrapper">
+        <img src="img/baner.png" alt="">
+    </div>
     <div class="container">
         <div class="game1">
             <div class="row">
-                <div class="col-6">
+                <div class="col-6 scoreWrapper">
                     <table>
                         <tbody>
                             <tr class="header">
@@ -26,7 +29,9 @@
 
                     </p>
                 </div>
-                <div class="col-6"></div>
+                <div class="col-6">
+                    <img class="baner" src="https://lib-podgornoe.ru/wp-content/uploads/2023/01/pole.png" alt="">
+                </div>
             </div>
             <div class="row">
                 <div class="wordWrapper">
@@ -43,9 +48,11 @@
                 <input type="text" class="letterEnter" maxlength="1">
             </div>
             <div class="row col-12">
-                <button class="enterBtn">
-                    Проверка
-                </button>
+                <div class="btnWrapper">
+                    <button class="enterBtn">
+                        Проверка
+                    </button>
+                </div>
                 <button class="fullWordBtn">
                     Ввести всё слово
                 </button>

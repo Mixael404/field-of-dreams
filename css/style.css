@@ -14,10 +14,11 @@
     position: relative;
 }
 
-.wordWrapper{
-    margin-top: 100px;
+.baner{
+    max-width: 600px;
+    display: block;
+    margin-left: auto;
 }
-
 .fieldsWrapper, .wordWrapper{
     display: flex;
     flex-wrap: wrap;
@@ -57,7 +58,11 @@
     color: black;
     font-weight: 600;
     border: none;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    display: block;
+    width: 40%;
+    margin: 0 auto;
+    border-radius: 10px;
 }
 .fullWordBtn, .lettersBtn{
     width: fit-content;
@@ -65,6 +70,13 @@
     background-color: transparent;
     color: blue;
     font-size: 24px;
+}
+
+.scoreWrapper{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
 }
 
 table{
@@ -90,6 +102,15 @@ td{
     transform: translate(-50%, -50%);
     animation: hideStr 2s ease-in-out forwards;
 }
+
+
+
+
+
+
+
+
+
 
 @keyframes hideStr{
     0% {
