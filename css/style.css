@@ -19,6 +19,12 @@
     display: block;
     margin-left: auto;
 }
+.questionWrapper{
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 44px;
+    font-weight: bold;
+}
 .fieldsWrapper, .wordWrapper{
     display: flex;
     flex-wrap: wrap;
