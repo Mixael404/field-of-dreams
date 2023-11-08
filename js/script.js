@@ -56,8 +56,8 @@ class Game {
         this.fullScore = new Array(setup.players).fill(0);
         this.players = new Array(this.amountOfPlayers);
         this.currentPlayer = 0;
-
-        this.init();
+        this.startNewGame();
+        // this.init();
         this.scoreRow = this.table.children[1];
 
         this.addEventListeners();
@@ -354,9 +354,9 @@ class Game {
 const game1 = {
     root: ".game1",
     word: "мама",
-    players: 2,
+    players: 3,
     words: ["", "солома", "река", "крабик", "дом", "дверь"],
-    questions: ["", "антоним сена", "текущая вода", "краб ласково", "жильё", "люди открывают дома"],
+    questions: ["", "Антоним сена", "Текущая вода", "Краб ласково", "Жильё человека", "Предмет разделяющий помещение на комнаты"],
     name: "Mikhail"
 }
 const newGame = new Game(game1);
