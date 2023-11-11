@@ -4,11 +4,11 @@
 }
 
 
-body {
-    background-image: url(../img/background.jpg);
+.gameWrapper {
+    background-image: url(../img/mainBG.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 .hidden {
@@ -35,10 +35,15 @@ div {
     margin-left: auto;
 }
 
+
+.wheelWrapper{
+    max-width: 300px;
+    max-height: 300px;
+}
 .questionWrapper {
     margin-bottom: 10px;
     text-align: center;
-    font-size: 44px;
+    font-size: 28px;
     font-weight: bold;
 }
 
@@ -49,7 +54,7 @@ div {
     justify-content: center;
     align-items: center;
     gap: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .fieldsWrapper .field,
@@ -68,7 +73,7 @@ div {
 
 .letterEnter {
     margin: 0 auto;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .enterTitle {
@@ -97,8 +102,8 @@ div {
     color: black;
     font-size: 20px;
     font-weight: bold;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     box-sizing: border-box;
     border: none;
     border-radius: 50%;
@@ -123,7 +128,7 @@ div {
 }
 
 table {
-    border: 3px solid #888;
+    border: 3px solid white;
     text-align: center;
     margin-top: 50px;
     margin-bottom: 20px;
@@ -145,9 +150,17 @@ td {
     transform: translate(-50%, -50%);
     animation: hideStr 2s ease-in-out forwards;
 }
+.amountOfPlayers{
+    margin-bottom: 20px;
+}
 
 
 
+@media (min-width: 992px){
+    .questionWrapper{
+        font-size: 40px
+    }
+}
 
 
 

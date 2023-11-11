@@ -1,3 +1,6 @@
+
+
+
 function isCookiesHaveKey(key) {
     return document.cookie.includes(key) == true;
 }
@@ -11,8 +14,8 @@ class Game {
         const isCookiesHaveWord = isCookiesHaveKey("word");
         const isCookiesHaveQuestion = isCookiesHaveKey("question");
         const isCookiesHaveCurrentPlayer = isCookiesHaveKey("currentplayer");
+        const isCookiesHaveAmountOfPlayers = isCookiesHaveKey("amountofplayers");
         console.log(isCookiesHaveState);
-
         if (!isCookiesHaveState) {
             this.createCookieKey("state=[]");
         }
@@ -28,7 +31,10 @@ class Game {
         if (!isCookiesHaveCurrentPlayer) {
             this.createCookieKey("currentplayer=")
         }
-
+        if (!isCookiesHaveAmountOfPlayers) {
+            this.createCookieKey("amountofplayers=")
+        }
+        playersInput.value = this.getData("amountofplayers");
 
         this.root = document.querySelector(setup.root);
 
@@ -50,14 +56,47 @@ class Game {
         this.playerLabel = this.root.querySelector(".currentPlayer");
         this.newGameBtn = this.root.querySelector(".newGame");
 
-        this.amountOfPlayers = setup.players;
+        this.wheel = this.root.querySelector("#myChart");
+        console.log(this.wheel);
+        this.colors = new Array(6).fill(255);
+        this.dataWheel = {
+            type: 'pie',
+            data: {
+                labels: [100, 200, 300, 500, 400, 150],
+                datasets: [{
+                    data: [3, 3, 3, 3, 3, 3],
+                    borderWidth: 1,
+                    backgroundColor: [
+                        `rgb(255, 255, ${this.colors[0]})`,
+                        `rgb(255, 255, ${this.colors[1]})`,
+                        `rgb(255, 255, ${this.colors[2]})`,
+                        `rgb(255, 255, ${this.colors[3]})`,
+                        `rgb(255, 255, ${this.colors[4]})`,
+                        `rgb(255, 255, ${this.colors[5]})`
+                    ],
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+        this.changeSelectedWheel();
+        console.log(this.dataWheel.data.datasets[0].backgroundColor[2]);
+        // this.colors[3] = 100;
+        // this.dataWheel.data.datasets[0].backgroundColor[2] = "rgb(100, 201, 294)";
+
+        this.amountOfPlayers = this.getData("amountofplayers");
         this.wordsForPlay = setup.words;
         this.questions = setup.questions;
         this.fullScore = new Array(setup.players).fill(0);
         this.players = new Array(this.amountOfPlayers);
         this.currentPlayer = 0;
-        this.startNewGame();
-        // this.init();
+        // this.startNewGame();
+        this.init();
         this.scoreRow = this.table.children[1];
 
         this.addEventListeners();
@@ -70,10 +109,12 @@ class Game {
         this.state = this.getData("state");
         this.checkedLetters = [];
         this.players = this.getData("players");
+        this.amountOfPlayers = this.players.length;
         this.currentPlayer = this.getData("currentplayer");
         this.setVisualElements();
         this.setScoreTable();
         this.drawLetters();
+        this.startWheel();
         console.log(this.wordArray);
         this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
     }
@@ -87,6 +128,26 @@ class Game {
     }
 
 
+    changeSelectedWheel(index){
+        let sectorsArray = this.dataWheel.data.datasets[0].backgroundColor;
+        let activeSector = sectorsArray.findIndex((sector) => {
+            console.log(sector !== "rgb(255, 255, 255)");
+            if (sector != "rgb(255, 255, 255)"){
+                return true;
+            }
+        })
+        this.colors[2] = 100;
+        sectorsArray.forEach((sector, index) => {
+            sector = this.colors[index]
+            console.log(sector);
+        })
+        console.log(this.colors);
+        console.log(secto   rsArray);
+        // activeSector = "rgb(155, 155, 155)";
+        // console.log(activeSector);
+        console.log(sectorsArray);
+        // sectorsArray[4] = "rgb(55, 55, 55)"
+    }
 
     createElement(tag, wrapper, styleClass, text) {
         const element = document.createElement(tag);
@@ -109,6 +170,14 @@ class Game {
             this.createElement("div", this.wordWrapper, "letterWrapper");
             this.createElement("input", this.fieldsWrapper, "field");
         }
+    }
+
+    startWheel() {
+        // let colors = new Array(6).fill(255);
+        // console.log(colors);
+        // colors[3] = 100;
+        // this.colors = new Array(6).fill(255);
+        new Chart(this.wheel, this.dataWheel);
     }
 
     setScoreTable() {
@@ -153,7 +222,6 @@ class Game {
         })
     }
 
-
     changeInputType(typeOperation) {
         this.wordFullSection.classList.toggle("collapsed");
         this.letterSection.classList.toggle("collapsed");
@@ -161,10 +229,13 @@ class Game {
         this.oneLetterBtn.classList.toggle("collapsed");
     }
 
+
+
+
     lettersInput() {
         const letterInputHidden = this.letterSection.classList.contains("collapsed");
-        const wordIncludesLetter = this.wordArray.includes(this.inputLetter.value);
-        const letterAlreadyWas = this.checkedLetters.includes(this.inputLetter.value);
+        const wordIncludesLetter = this.wordArray.includes(this.inputLetter.value.toLowerCase());
+        const letterAlreadyWas = this.checkedLetters.includes(this.inputLetter.value.toLowerCase());
         if (letterInputHidden) {
             return;
         }
@@ -182,14 +253,14 @@ class Game {
             this.nextPlayer();
         }
         if (wordIncludesLetter) {
-            const letter = this.inputLetter.value;
+            const letter = this.inputLetter.value.toLowerCase();
             const indexes = this.findLetters(letter);
             for (let index of indexes) {
                 this.state[index] = letter;
             }
             this.drawLetters();
             this.inputLetter.value = "";
-            this.players[this.currentPlayer] += 100 * this.generateRandomInt(5);
+            this.players[this.currentPlayer] += 100 * this.generateRandomIntWithoutNull(5);
             this.checkedLetters.push(letter);
             this.updateScoreTable(this.players);
             this.pushToCookie("players", this.players)
@@ -209,7 +280,7 @@ class Game {
         let word = [];
 
         for (let i = 0; i < this.fieldsWrapper.children.length; i++) {
-            word.push(this.fieldsWrapper.children[i].value);
+            word.push(this.fieldsWrapper.children[i].value.toLowerCase());
         }
 
 
@@ -238,7 +309,7 @@ class Game {
             this.fullScore[i] += this.players[i];
         }
         console.log(this.fullScore);
-        this.word = this.wordsForPlay[this.generateRandomInt(4)];
+        this.word = this.wordsForPlay[this.generateRandomIntWithoutNull(4)];
         this.showWin();
         this.currentPlayer = 0;
         this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
@@ -274,7 +345,7 @@ class Game {
         document.cookie = "currentplayer=" + this.currentPlayer;
     }
 
-    generateRandomInt(max) {
+    generateRandomIntWithoutNull(max) {
         let maxNumber = Math.floor(Math.random() * max);
         if (maxNumber == 0) {
             maxNumber = 1;
@@ -282,8 +353,13 @@ class Game {
         return maxNumber;
     }
 
+    getRandomArrayElement(arr){
+        let index = Math.floor(Math.random() * arr.length);
+        return arr[index];
+    }
+
     generateWord() {
-        const index = this.generateRandomInt(6);
+        const index = this.generateRandomIntWithoutNull(6);
         this.word = this.wordsForPlay[index];
         this.question = this.questions[index];
         console.log(this.question);
@@ -296,14 +372,18 @@ class Game {
     }
 
     startNewGame() {
+        console.log("new");
         document.cookie = "state=[]";
+        this.amountOfPlayers = +(playersInput.value);
         this.players = new Array(this.amountOfPlayers);
         let playersArr = this.players.fill(0);
         this.pushToCookie("players", playersArr);
+        this.pushToCookie("amountofplayers", this.amountOfPlayers);
         document.cookie = "currentplayer=0";
         this.generateWord();
         this.init();
     }
+
 
 
 
@@ -338,7 +418,7 @@ class Game {
         let arrData;
         if (key == "word") {
             arrData = decodedData.split("");
-        } else if (key == "currentplayer") {
+        } else if (key == "currentplayer" || key == "amountofplayers") {
             arrData = +(decodedData);
         } else {
             arrData = JSON.parse(decodedData);
@@ -347,16 +427,21 @@ class Game {
 
         // return JSON.parse(decodeURIComponent(this.getStateFromCookie()));
     }
+
 }
 
 
+
+const playersInput = document.querySelector(".amountOfPlayers");
 
 const game1 = {
     root: ".game1",
     word: "мама",
-    players: 3,
+    // players: 2,
     words: ["", "солома", "река", "крабик", "дом", "дверь"],
     questions: ["", "Антоним сена", "Текущая вода", "Краб ласково", "Жильё человека", "Предмет разделяющий помещение на комнаты"],
     name: "Mikhail"
 }
+
+// game1.players = +(playersInput.value);
 const newGame = new Game(game1);
