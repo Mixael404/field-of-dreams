@@ -55,6 +55,7 @@ class Game {
         this.table = this.root.querySelector("table>tbody");
         this.playerLabel = this.root.querySelector(".currentPlayer");
         this.newGameBtn = this.root.querySelector(".newGame");
+        this.scoreValueField = this.root.querySelector(".currentScore");
 
         this.wheel = this.root.querySelector("#myChart");
         console.log(this.wheel);
@@ -67,12 +68,12 @@ class Game {
                     data: [3, 3, 3, 3, 3, 3],
                     borderWidth: 1,
                     backgroundColor: [
-                        `rgb(255, 255, ${this.colors[0]})`,
-                        `rgb(255, 255, ${this.colors[1]})`,
-                        `rgb(255, 255, ${this.colors[2]})`,
-                        `rgb(255, 255, ${this.colors[3]})`,
-                        `rgb(255, 255, ${this.colors[4]})`,
-                        `rgb(255, 255, ${this.colors[5]})`
+                        `rgb(255, 255, 255)`,
+                        `rgb(255, 255, 255)`,
+                        `rgb(255, 255, 255)`,
+                        `rgb(255, 255, 255)`,
+                        `rgb(255, 255, 255)`,
+                        `rgb(255, 255, 255)`
                     ],
                 }]
             },
@@ -84,7 +85,7 @@ class Game {
                 }
             }
         };
-        this.changeSelectedWheel();
+        // console.log(this.dataWheel.data.labels);
         console.log(this.dataWheel.data.datasets[0].backgroundColor[2]);
         // this.colors[3] = 100;
         // this.dataWheel.data.datasets[0].backgroundColor[2] = "rgb(100, 201, 294)";
@@ -98,6 +99,8 @@ class Game {
         // this.startNewGame();
         this.init();
         this.scoreRow = this.table.children[1];
+        this.currentScore = this.generateRandomIntWithoutNull(5) * 100;
+        this.scoreValueField.textContent = `${this.currentScore} очков на барабане`
 
         this.addEventListeners();
         this.playerLabel.textContent = `Ход игрока ${(this.currentPlayer + 1)}`;
@@ -130,23 +133,19 @@ class Game {
 
     changeSelectedWheel(index){
         let sectorsArray = this.dataWheel.data.datasets[0].backgroundColor;
-        let activeSector = sectorsArray.findIndex((sector) => {
-            console.log(sector !== "rgb(255, 255, 255)");
-            if (sector != "rgb(255, 255, 255)"){
-                return true;
+        sectorsArray[1] = "rgb(0,0,0)";
+
+        // Deactivate previos active sector
+        for (let i = 0; i < sectorsArray.length; i++) {
+            if (sectorsArray[i] !== "rgb(255, 255, 255)"){
+                sectorsArray[i] = "rgb(255, 255, 255)";
             }
-        })
-        this.colors[2] = 100;
-        sectorsArray.forEach((sector, index) => {
-            sector = this.colors[index]
-            console.log(sector);
-        })
-        console.log(this.colors);
-        console.log(secto   rsArray);
-        // activeSector = "rgb(155, 155, 155)";
-        // console.log(activeSector);
+        }
+        // Activate new sector
+        sectorsArray[index] = "rgb(100, 200, 0)";
         console.log(sectorsArray);
-        // sectorsArray[4] = "rgb(55, 55, 55)"
+        this.currentScore = this.dataWheel.data.labels[index];
+        console.log(this.dataWheel.data.labels[index]);
     }
 
     createElement(tag, wrapper, styleClass, text) {
@@ -251,6 +250,8 @@ class Game {
         if (!wordIncludesLetter) {
             this.inputLetter.value = "";
             this.nextPlayer();
+            this.changeSelectedWheel(this.generateRandomWheelSection());
+            this.scoreValueField.textContent = `${this.currentScore} очков на барабане`;
         }
         if (wordIncludesLetter) {
             const letter = this.inputLetter.value.toLowerCase();
@@ -260,8 +261,11 @@ class Game {
             }
             this.drawLetters();
             this.inputLetter.value = "";
-            this.players[this.currentPlayer] += 100 * this.generateRandomIntWithoutNull(5);
+            console.log(this.currentScore);
+            this.players[this.currentPlayer] += this.currentScore;
             this.checkedLetters.push(letter);
+            this.changeSelectedWheel(this.generateRandomWheelSection());
+            this.scoreValueField.textContent = `${this.currentScore} очков на барабане`
             this.updateScoreTable(this.players);
             this.pushToCookie("players", this.players)
             this.pushToCookie("state", this.state)
@@ -351,6 +355,10 @@ class Game {
             maxNumber = 1;
         }
         return maxNumber;
+    }
+
+    generateRandomWheelSection(){
+        return Math.floor(Math.random() * 6)
     }
 
     getRandomArrayElement(arr){
